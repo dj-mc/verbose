@@ -8,7 +8,7 @@ function ThemeToggle() {
       <Button
         onClick={() => toggleColorMode()}
         top="0"
-        right="0"
+        left="0"
         pos="absolute"
         m="1rem"
       >

@@ -24,6 +24,13 @@ const theme = {
         fontSize: "revert",
         textAlign: "center",
       },
+      hr: {
+        width: "100%",
+      },
+      ".label-error": {
+        display: "flex",
+        justifyContent: "space-between",
+      },
     },
   },
 };
