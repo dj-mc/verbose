@@ -1,51 +1,57 @@
-import {
-  Button,
-  ButtonGroup,
-  Divider,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input,
-  VStack,
-} from "@chakra-ui/react";
+import { Button, ButtonGroup, VStack } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
+import { useNavigate } from "react-router-dom";
+
+import { auth_schema } from "./SignUp";
+import TextInput from "../TextInput";
 
 function Login() {
+  const navigate = useNavigate();
   return (
     <>
-      <VStack as="form" w={[300, 400, 500]} h="100vh" justify="center" m="auto">
-        <h1>Login</h1>
-        <FormControl>
-          <FormLabel>Username</FormLabel>
-          <Input name="username"></Input>
-          <FormErrorMessage>Invalid username</FormErrorMessage>
-        </FormControl>
+      <Formik
+        initialValues={{ username: "", password: "" }}
+        validationSchema={auth_schema}
+        onSubmit={(values, actions) => {
+          alert(JSON.stringify(values, null, 2));
+          actions.resetForm();
+        }}
+      >
+        <VStack
+          as={Form}
+          w={[300, 400, 500]}
+          h="100vh"
+          justify="center"
+          m="auto"
+        >
+          <h1>Login</h1>
 
-        <FormControl>
-          <FormLabel>Password</FormLabel>
-          <Input name="password"></Input>
-          <FormErrorMessage>Invalid password</FormErrorMessage>
-        </FormControl>
+          {/* Handle username */}
+          <TextInput name="username" label="Username" />
+          {/* Handle password */}
+          <TextInput name="password" label="Password" type="password" />
 
-        <Divider />
-        <ButtonGroup w="inherit" justifyContent={"space-between"}>
-          <Button type="submit" colorScheme="cyan">
-            Login
-          </Button>
+          <hr />
+          <ButtonGroup w="inherit" justifyContent={"space-between"}>
+            <Button type="submit" colorScheme="cyan">
+              Login
+            </Button>
 
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              height: "inherit",
-            }}
-          >
-            <p>— or —</p>
-          </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                height: "inherit",
+              }}
+            >
+              <p>— or —</p>
+            </div>
 
-          <Button>Create Account</Button>
-        </ButtonGroup>
-        <Divider />
-      </VStack>
+            <Button onClick={() => navigate("/register")}>Create</Button>
+          </ButtonGroup>
+          <hr />
+        </VStack>
+      </Formik>
     </>
   );
 }
