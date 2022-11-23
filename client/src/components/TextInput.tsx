@@ -1,9 +1,4 @@
-import {
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input,
-} from "@chakra-ui/react";
+import { FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { Field, useField } from "formik";
 
 interface ITextInput {
@@ -23,7 +18,7 @@ function TextInput({ label, ...props }: ITextInput) {
       >
         <div className="label-error">
           <FormLabel>{label}</FormLabel>{" "}
-          <FormErrorMessage>{meta.error}</FormErrorMessage>
+          <p className="error-message">{meta.error}</p>
         </div>
         <Input as={Field} {...field} {...props}></Input>
       </FormControl>

@@ -24,7 +24,7 @@ function Login() {
           justify="center"
           m="auto"
         >
-          <h1>Login</h1>
+          <h1 className="h1-title">Login</h1>
 
           {/* Handle username */}
           <TextInput name="username" label="Username" />
@@ -32,7 +32,11 @@ function Login() {
           <TextInput name="password" label="Password" type="password" />
 
           <hr />
-          <ButtonGroup w="inherit" justifyContent={"space-between"}>
+          <ButtonGroup
+            className="button-group"
+            w="inherit"
+            justifyContent={"space-between"}
+          >
             <Button type="submit" colorScheme="cyan">
               Login
             </Button>

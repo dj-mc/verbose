@@ -27,9 +27,19 @@ const theme = {
       hr: {
         width: "100%",
       },
+      ".h1-title": {
+        marginBottom: "20px",
+      },
       ".label-error": {
         display: "flex",
         justifyContent: "space-between",
+      },
+      ".error-message": {
+        color: "red.300",
+        fontSize: "smaller",
+      },
+      ".button-group button": {
+        width: "100px",
       },
     },
   },

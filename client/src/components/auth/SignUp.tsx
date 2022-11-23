@@ -37,7 +37,7 @@ function SignUp() {
           justify="center"
           m="auto"
         >
-          <h1>Sign Up</h1>
+          <h1 className="h1-title">Sign Up</h1>
 
           {/* Handle username */}
           <TextInput name="username" label="Username" />
@@ -45,7 +45,11 @@ function SignUp() {
           <TextInput name="password" label="Password" type="password" />
 
           <hr />
-          <ButtonGroup w="inherit" justifyContent={"space-between"}>
+          <ButtonGroup
+            className="button-group"
+            w="inherit"
+            justifyContent={"space-between"}
+          >
             <Button type="submit" colorScheme="cyan">
               Create
             </Button>
