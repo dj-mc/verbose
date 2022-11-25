@@ -1,11 +1,12 @@
-import http from "node:http";
+import http from "http";
 
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import { Server } from "socket.io";
 
-import auth_router from "./router/auth-router";
+// Weird: append .js to local imports to support ESM
+import { auth_router } from "./router/auth-router.js";
 
 const app = express();
 const server = http.createServer(app);

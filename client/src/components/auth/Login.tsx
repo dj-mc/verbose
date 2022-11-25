@@ -2,7 +2,7 @@ import { Button, ButtonGroup, VStack } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 
-import { auth_schema } from "./SignUp";
+import { auth_schema } from "verbose-common";
 import TextInput from "../TextInput";
 
 function Login() {
