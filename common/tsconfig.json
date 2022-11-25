@@ -10,6 +10,5 @@
     "baseUrl": "."
   },
   "include": ["./src/**/*.ts", "./src/**/*.tsx"],
-  "exclude": ["node_modules"],
-  "references": [{"path": "../common"}]
+  "exclude": ["node_modules"]
 }

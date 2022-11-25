@@ -1,0 +1,16 @@
+{
+  "name": "verbose",
+  "repository": "https://github.com/dj-mc/verbose.git",
+  "author": "dj-mc <49037253+dj-mc@users.noreply.github.com>",
+  "private": true,
+  "version": "1.0.0",
+  "license": "ISC",
+  "workspaces": [
+    "client",
+    "common",
+    "server"
+  ],
+  "scripts": {
+    "pretty": "npx prettier ./**/*.{ts,tsx,html,css,md,json} --check --ignore-path .gitignore"
+  }
+}
