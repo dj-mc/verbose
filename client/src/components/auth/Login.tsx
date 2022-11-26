@@ -3,6 +3,7 @@ import { Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 
 import { auth_schema } from "verbose-common";
+import { submit_auth } from "./submit-auth";
 import TextInput from "../TextInput";
 
 function Login() {
@@ -12,31 +13,7 @@ function Login() {
       <Formik
         initialValues={{ username: "", password: "" }}
         validationSchema={auth_schema}
-        onSubmit={(values, actions) => {
-          actions.resetForm();
-          fetch("http://localhost:4242/auth/login", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ ...values }),
-          })
-            .catch((error) => {
-              console.error(error);
-              return;
-            })
-            .then((response) => {
-              if (!response || !response.ok || response.status >= 400) {
-                return;
-              }
-              return response.json();
-            })
-            .then((data) => {
-              if (!data) return;
-              console.log(data);
-            });
-        }}
+        onSubmit={(values, actions) => submit_auth(values, actions, "login")}
       >
         <VStack
           as={Form}
