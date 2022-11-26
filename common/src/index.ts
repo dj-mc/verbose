@@ -4,13 +4,14 @@ const auth_schema = Yup.object({
   // Validate username input
   username: Yup.string()
     .required("Required")
-    .min(3, "Need at least 3 characters")
-    .max(16, "Need at most 16 characters"),
+    .min(3, "Must be at least 3 characters")
+    .max(16, "Must be at most 16 characters")
+    .matches(/[a-z]{3}[\w]*/i, "Must start with 3 alphabet characters"),
   // Validate password input
   password: Yup.string()
     .required("Required")
-    .min(9, "Need at least 9 characters")
-    .max(32, "Need at most 32 characters"),
+    .min(9, "Must be at least 9 characters")
+    .max(32, "Must be at most 32 characters"),
 });
 
 export { auth_schema };
