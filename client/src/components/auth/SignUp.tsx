@@ -13,8 +13,29 @@ function SignUp() {
         initialValues={{ username: "", password: "" }}
         validationSchema={auth_schema}
         onSubmit={(values, actions) => {
-          alert(JSON.stringify(values, null, 2));
           actions.resetForm();
+          fetch("http://localhost:4242/auth/register", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ ...values }),
+          })
+            .catch((error) => {
+              console.error(error);
+              return;
+            })
+            .then((response) => {
+              if (!response || !response.ok || response.status >= 400) {
+                return;
+              }
+              return response.json();
+            })
+            .then((data) => {
+              if (!data) return;
+              console.log(data);
+            });
         }}
       >
         <VStack
