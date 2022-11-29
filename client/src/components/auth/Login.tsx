@@ -13,7 +13,14 @@ function Login() {
       <Formik
         initialValues={{ username: "", password: "" }}
         validationSchema={auth_schema}
-        onSubmit={(values, actions) => submit_auth(values, actions, "login")}
+        // Pass input values from form to submission function
+        // Actions contain FormikHelpers utilities
+        onSubmit={(values, actions) =>
+          submit_auth(values, actions, "login").then((data) => {
+            if (!data) return;
+            navigate("/dashboard");
+          })
+        }
       >
         <VStack
           as={Form}

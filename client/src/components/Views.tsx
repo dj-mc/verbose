@@ -11,6 +11,7 @@ function Views() {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<SignUp />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/dashboard" element={<p>Dashboard</p>} />
       </Routes>
     </>
   );

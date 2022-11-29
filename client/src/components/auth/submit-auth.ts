@@ -8,14 +8,16 @@ function submit_auth(
   }>,
   endpoint: string
 ) {
-  actions.resetForm();
-  fetch(`http://localhost:4242/auth/${endpoint}`, {
+  actions.resetForm(); // Clear submitted form
+
+  return fetch(`http://localhost:4242/auth/${endpoint}`, {
+    // POST request to specified auth route endpoint (login/register)
     method: "POST",
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ ...values }),
+    body: JSON.stringify({ ...values }), // Username/password
   })
     .catch((error) => {
       console.error(error);
@@ -23,13 +25,10 @@ function submit_auth(
     })
     .then((response) => {
       if (!response || !response.ok || response.status >= 400) {
-        return;
+        return; // Bad server response
+      } else {
+        return response.json(); // Return then-able promise
       }
-      return response.json();
-    })
-    .then((data) => {
-      if (!data) return;
-      console.log(data);
     });
 }
 
