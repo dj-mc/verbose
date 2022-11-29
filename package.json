@@ -11,6 +11,7 @@
     "server"
   ],
   "scripts": {
-    "pretty": "npx prettier ./**/*.{ts,tsx,html,css,md,json} --check --ignore-path .gitignore"
+    "spell": "npx cspell '**' -u --gitignore -e '.git' -e 'pgdata'; return 0",
+    "pretty": "npx prettier ./**/*.{ts,tsx,html,css,md,json} --check '!./**/pgdata' --ignore-path .gitignore"
   }
 }
