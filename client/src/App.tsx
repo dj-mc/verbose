@@ -1,11 +1,14 @@
 import ThemeToggle from "./components/ThemeToggle";
+import { UserContext } from "./components/UserContext";
 import Views from "./components/Views";
 
 function App() {
   return (
     <div className="App">
-      <Views />
-      <ThemeToggle />
+      <UserContext>
+        <Views />
+        <ThemeToggle />
+      </UserContext>
     </div>
   );
 }
