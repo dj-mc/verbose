@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, VStack } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../UserContext";
@@ -10,7 +10,9 @@ import TextInput from "../TextInput";
 
 function Login() {
   const { set_user } = useContext(AuthContext);
+  const [error, set_error] = useState("");
   const navigate = useNavigate();
+
   return (
     <>
       <Formik
@@ -21,9 +23,12 @@ function Login() {
         onSubmit={(values, actions) =>
           submit_auth_handler(values, actions, "login").then((data) => {
             if (!data) return;
-            console.log(data);
             set_user({ ...data });
-            navigate("/dashboard");
+            if (data.status) {
+              set_error(data.status);
+            } else if (data.logged_in === true) {
+              navigate("/dashboard");
+            }
           })
         }
       >
@@ -64,6 +69,8 @@ function Login() {
             <Button onClick={() => navigate("/register")}>Create</Button>
           </ButtonGroup>
           <hr />
+
+          <p className="error-message">{error}</p>
         </VStack>
       </Formik>
     </>
