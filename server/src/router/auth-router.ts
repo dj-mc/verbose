@@ -34,40 +34,52 @@ declare module "express-session" {
   }
 }
 
-AuthRouter.post("/login", async (request, response) => {
-  validate_form(request, response);
-  const { username, password } = request.body;
+AuthRouter.route("/login")
+  .get(async (request, response) => {
+    // Check if a user is already logged in
+    if (request.session.user && request.session.user.username) {
+      response.json({
+        logged_in: true,
+        username: request.session.user.username,
+      });
+    } else {
+      response.json({ logged_in: false }); // Not logged in
+    }
+  })
+  .post(async (request, response) => {
+    validate_form(request, response);
+    const { username, password } = request.body;
 
-  // Query for a potentially registered user
-  const pending_login = await db_pool.query(
-    "SELECT id, username, password_hash FROM users u WHERE u.username=$1",
-    [username]
-  );
-
-  let compared_password;
-  if (pending_login.rowCount > 0) {
-    // Database returned something from query
-    compared_password = await bcrypt.compare(
-      password,
-      pending_login.rows[0].password_hash
+    // Query for a potentially registered user
+    const pending_login = await db_pool.query(
+      "SELECT id, username, password_hash FROM users u WHERE u.username=$1",
+      [username]
     );
 
-    if (compared_password) {
-      // Found password from hash
-      // Set login session cookie
-      request.session.user = {
-        username,
-        id: pending_login.rows[0].id,
-      };
+    let compared_password;
+    if (pending_login.rowCount > 0) {
+      // Database returned something from query
+      compared_password = await bcrypt.compare(
+        password,
+        pending_login.rows[0].password_hash
+      );
 
-      response.json({ logged_in: true, username });
+      if (compared_password) {
+        // Found password from hash
+        // Set login session cookie
+        request.session.user = {
+          username,
+          id: pending_login.rows[0].id,
+        };
+
+        response.json({ logged_in: true, username });
+      } else {
+        response.json({ logged_in: false, status: "Incorrect authorization" });
+      }
     } else {
       response.json({ logged_in: false, status: "Incorrect authorization" });
     }
-  } else {
-    response.json({ logged_in: false, status: "Incorrect authorization" });
-  }
-});
+  });
 
 AuthRouter.post("/register", async (request, response) => {
   validate_form(request, response);
