@@ -1,14 +1,14 @@
 import bcrypt from "bcrypt";
 import express, { Request, Response } from "express";
 
-import { auth_schema } from "verbose-common";
+import { auth_validation_schema } from "verbose-common";
 import db_pool from "../../db.js";
 
 const AuthRouter = express.Router();
 
 function validate_form(request: Request, response: Response) {
   const auth_form_data = request.body;
-  auth_schema
+  auth_validation_schema
     .validate(auth_form_data)
     .catch((error) => {
       // Handle invalid POST requests from anywhere
@@ -102,4 +102,4 @@ AuthRouter.post("/register", async (request, response) => {
   }
 });
 
-export { AuthRouter };
+export default AuthRouter;

@@ -8,7 +8,7 @@ import { Server } from "socket.io";
 
 // This project is fullstack typescript outputting esnext,
 // so we must append .js to local imports to support esm in nodejs.
-import { AuthRouter } from "./router/auth-router.js";
+import AuthRouter from "./router/auth-router.js";
 // I could've had the verbose-common code output to cjs, but
 // the client's scaffold (vite -> esnext) was not playing along.
 

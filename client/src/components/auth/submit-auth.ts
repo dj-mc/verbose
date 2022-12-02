@@ -1,6 +1,6 @@
 import { FormikHelpers } from "formik";
 
-function submit_auth(
+function submit_auth_handler(
   values: { username: string; password: string },
   actions: FormikHelpers<{
     username: string;
@@ -32,4 +32,4 @@ function submit_auth(
     });
 }
 
-export { submit_auth };
+export default submit_auth_handler;

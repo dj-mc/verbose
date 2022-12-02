@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-const auth_schema = Yup.object({
+const auth_validation_schema = Yup.object({
   // Validate username input
   username: Yup.string()
     .required("Required")
@@ -14,4 +14,4 @@ const auth_schema = Yup.object({
     .max(32, "Must be at most 32 characters"),
 });
 
-export { auth_schema };
+export { auth_validation_schema };
