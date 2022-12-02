@@ -1,23 +1,28 @@
 import { Button, ButtonGroup, VStack } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { auth_schema } from "verbose-common";
-import { submit_auth } from "./submit-auth";
+import { AuthContext } from "../UserContext";
+import { auth_validation_schema } from "verbose-common";
+import submit_auth_handler from "./submit-auth";
 import TextInput from "../TextInput";
 
 function SignUp() {
+  const { set_user } = useContext(AuthContext);
   const navigate = useNavigate();
   return (
     <>
       <Formik
         initialValues={{ username: "", password: "" }}
-        validationSchema={auth_schema}
+        validationSchema={auth_validation_schema}
         // Pass input values from form to submission function
         // Actions contain FormikHelpers utilities
         onSubmit={(values, actions) =>
-          submit_auth(values, actions, "register").then((data) => {
+          submit_auth_handler(values, actions, "register").then((data) => {
             if (!data) return;
+            console.log(data);
+            set_user({ ...data });
             navigate("/dashboard");
           })
         }
