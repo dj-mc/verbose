@@ -4,13 +4,13 @@ import cors from "cors";
 import express from "express";
 import session from "express-session";
 import helmet from "helmet";
-import Redis from "ioredis";
 import connectRedis from "connect-redis";
 import { Server } from "socket.io";
 
 // This project is fullstack typescript outputting esnext,
 // so we must append .js to local imports to support esm in nodejs.
-import AuthRouter from "./router/auth-router.js";
+import auth_router from "./router/auth-router.js";
+import redis_client from "../redis.js";
 // I could've had the verbose-common code output to cjs, but
 // the client's scaffold (vite -> esnext) was not playing along.
 
@@ -28,7 +28,6 @@ const io = new Server(server, {
   cors: cors_options,
 });
 
-const redis_client = new Redis();
 const RedisStore = connectRedis(session);
 
 /*
@@ -56,7 +55,7 @@ app.use(
     },
   })
 );
-app.use("/auth", AuthRouter); // Route requests to /auth
+app.use("/auth", auth_router); // Route requests to /auth
 
 app.get("/", (request, response) => {
   response.json("Hello, world");

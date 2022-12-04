@@ -1,18 +1,20 @@
 import express from "express";
 
 import {
-  is_logged_in_handler,
-  pending_login_handler,
-  pending_register_handler,
-  validate_form_handler,
+  is_logged_in,
+  pending_login,
+  pending_register,
+  validate_form,
 } from "../controller/auth-controller.js";
+import limit_requests from "../controller/limit-requests.js";
 
-const AuthRouter = express.Router();
+const auth_router = express.Router();
 
-AuthRouter.route("/login")
-  .get(is_logged_in_handler)
-  .post(validate_form_handler, pending_login_handler);
+auth_router
+  .route("/login")
+  .get(is_logged_in)
+  .post(validate_form, limit_requests, pending_login);
 
-AuthRouter.post("/register", validate_form_handler, pending_register_handler);
+auth_router.post("/register", validate_form, limit_requests, pending_register);
 
-export default AuthRouter;
+export default auth_router;

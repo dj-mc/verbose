@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from "express";
 import db_pool from "../../db.js";
 import { auth_validation_schema } from "verbose-common";
 
-function validate_form_handler(
+function validate_form(
   request: Request,
   response: Response,
   next: NextFunction
@@ -39,7 +39,7 @@ declare module "express-session" {
   }
 }
 
-function is_logged_in_handler(request: Request, response: Response) {
+function is_logged_in(request: Request, response: Response) {
   // Check if a user is already logged in
   if (request.session.user && request.session.user.username) {
     response.json({
@@ -51,7 +51,7 @@ function is_logged_in_handler(request: Request, response: Response) {
   }
 }
 
-async function pending_login_handler(request: Request, response: Response) {
+async function pending_login(request: Request, response: Response) {
   const { username, password } = request.body;
 
   // Query for a potentially registered user
@@ -85,7 +85,7 @@ async function pending_login_handler(request: Request, response: Response) {
   }
 }
 
-async function pending_register_handler(request: Request, response: Response) {
+async function pending_register(request: Request, response: Response) {
   const { username, password } = request.body;
 
   // Check if username already exists
@@ -118,8 +118,8 @@ async function pending_register_handler(request: Request, response: Response) {
 }
 
 export {
-  is_logged_in_handler,
-  pending_login_handler,
-  pending_register_handler,
-  validate_form_handler,
+  is_logged_in,
+  pending_login,
+  pending_register,
+  validate_form,
 };
