@@ -3,7 +3,8 @@ import { Route, Routes } from "react-router-dom";
 
 import Login from "./auth/Login";
 import SignUp from "./auth/SignUp";
-import NotFound from "./NotFound";
+import Dashboard from "./pages/Dashboard";
+import NotFound from "./pages/NotFound";
 import Protected from "./Protected";
 import { AuthContext } from "./UserContext";
 
@@ -17,7 +18,7 @@ function Views() {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<SignUp />} />
         <Route element={<Protected />}>
-          <Route path="/dashboard" element={<p>Dashboard</p>} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
