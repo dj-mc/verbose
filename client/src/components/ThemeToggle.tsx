@@ -7,9 +7,11 @@ function ThemeToggle() {
     <>
       <Button
         onClick={() => toggleColorMode()}
-        top="0"
-        left="0"
-        pos="absolute"
+        className="theme-toggle"
+        // top="0"
+        // left="0"
+        // pos="absolute"
+        size={["xs", "sm", "md"]}
         m="1rem"
       >
         {colorMode === "dark" ? (

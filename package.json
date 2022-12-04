@@ -12,6 +12,6 @@
   ],
   "scripts": {
     "spell": "npx cspell '**' -u --gitignore -e '.git' -e 'pgdata'; return 0",
-    "pretty": "npx prettier ./**/*.{ts,tsx,html,css,md,json} --check '!./**/pgdata' --ignore-path .gitignore"
+    "pretty": "npx prettier ./**/*.{ts,tsx,html,css,md,json} --check '!./**/pgdata' --ignore-path .gitignore; return 0"
   }
 }

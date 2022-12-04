@@ -41,6 +41,10 @@ const theme = {
       ".button-group button": {
         width: "100px",
       },
+      ".theme-toggle": {
+        width: "16px",
+        height: "16px",
+      },
     },
   },
 };
