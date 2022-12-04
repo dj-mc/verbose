@@ -4,6 +4,8 @@ import cors from "cors";
 import express from "express";
 import session from "express-session";
 import helmet from "helmet";
+import Redis from "ioredis";
+import connectRedis from "connect-redis";
 import { Server } from "socket.io";
 
 // This project is fullstack typescript outputting esnext,
@@ -26,6 +28,9 @@ const io = new Server(server, {
   cors: cors_options,
 });
 
+const redis_client = new Redis();
+const RedisStore = connectRedis(session);
+
 /*
 
 Middleware
@@ -41,6 +46,7 @@ app.use(
     resave: false, // True is deprecated
     saveUninitialized: false, // True is deprecated
     secret: `${process.env.SESSION_SECRET}`, // Sign cookie
+    store: new RedisStore({ client: redis_client }),
     // Login `SessionData` cookie info
     cookie: {
       httpOnly: true, // Disallow client to see document.cookie
