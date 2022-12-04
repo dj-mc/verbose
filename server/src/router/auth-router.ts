@@ -13,8 +13,13 @@ const auth_router = express.Router();
 auth_router
   .route("/login")
   .get(is_logged_in)
-  .post(validate_form, limit_requests, pending_login);
+  .post(validate_form, limit_requests(120, 5), pending_login);
 
-auth_router.post("/register", validate_form, limit_requests, pending_register);
+auth_router.post(
+  "/register",
+  validate_form,
+  limit_requests(60, 3),
+  pending_register
+);
 
 export default auth_router;
