@@ -9,7 +9,7 @@
     "outDir": "./dist",
     "baseUrl": "."
   },
-  "include": ["db.ts", "./src/**/*.ts", "./src/**/*.tsx"],
+  "include": ["db.ts", "redis.ts", "./src/**/*.ts", "./src/**/*.tsx"],
   "exclude": ["node_modules"],
   "references": [{ "path": "../common" }]
 }
