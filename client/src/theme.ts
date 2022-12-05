@@ -45,6 +45,10 @@ const theme = {
         width: "16px",
         height: "16px",
       },
+      ".add-contact": {
+        width: "16px",
+        height: "16px",
+      },
     },
   },
 };
