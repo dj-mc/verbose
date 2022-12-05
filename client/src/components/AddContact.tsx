@@ -8,6 +8,10 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
+
+import { contact_validation_schema } from "verbose-common";
+import TextInput from "./TextInput";
 
 function AddContact({
   isOpen,
@@ -18,7 +22,7 @@ function AddContact({
 }) {
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
         {/* Modal sits atop on overlay background */}
         <ModalOverlay />
 
@@ -26,14 +30,26 @@ function AddContact({
         <ModalContent>
           <ModalHeader>Add New Contact</ModalHeader>
           <ModalCloseButton />
+          <Formik
+            initialValues={{ username: "" }}
+            validationSchema={contact_validation_schema}
+            onSubmit={(values, actions) => {
+              onClose(); // Close modal after validation
+              actions.resetForm();
+            }}
+          >
+            <Form>
+              <ModalBody>
+                <TextInput label="Contact's username" name="username" />
+              </ModalBody>
 
-          <ModalBody>Content</ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="cyan" mr={3} onClick={onClose}>
-              Add
-            </Button>
-          </ModalFooter>
+              <ModalFooter>
+                <Button type="submit" colorScheme="cyan">
+                  Add
+                </Button>
+              </ModalFooter>
+            </Form>
+          </Formik>
         </ModalContent>
       </Modal>
     </>
