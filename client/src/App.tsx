@@ -1,4 +1,4 @@
-import { UserContext } from "./components/UserContext";
+import UserContext from "./components/UserContext";
 
 import Views from "./components/Views";
 

@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const AuthContext = createContext(null);
+export const AuthContext = createContext(null);
 
 interface props {
   children?: React.ReactNode;
@@ -51,4 +51,4 @@ function UserContext({ children }: props) {
   );
 }
 
-export { AuthContext, UserContext };
+export default UserContext;
