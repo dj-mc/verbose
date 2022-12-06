@@ -5,7 +5,7 @@ import express from "express";
 import session from "express-session";
 import helmet from "helmet";
 import connectRedis from "connect-redis";
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 
 // This project is fullstack typescript outputting esnext,
 // so we must append .js to local imports to support esm in nodejs.
@@ -36,32 +36,71 @@ Middleware
 
 */
 
+declare module "http" {
+  interface IncomingMessage {
+    session: {
+      user: {
+        username: string;
+        id: number;
+      };
+    };
+  }
+}
+
+const session_middleware = session({
+  name: "sid", // Session ID
+  resave: false, // True is deprecated
+  saveUninitialized: false, // True is deprecated
+  secret: `${process.env.SESSION_SECRET}`, // Sign cookie
+  store: new RedisStore({ client: redis_client }),
+  // Login `SessionData` cookie info
+  cookie: {
+    httpOnly: true, // Disallow client to see document.cookie
+    maxAge: 3600 * 1000 * 24, // 24-hour cookie lifetime
+    sameSite: process.env.PRODUCTION === "true" ? "none" : "lax",
+    secure: process.env.PRODUCTION === "true" ? true : "auto",
+  },
+});
+
+function socket_session_interface(middleware: any) {
+  console.log("socket_session_interface");
+  return (socket: Socket, next: any) => middleware(socket.request, {}, next);
+}
+
+function authorize_socket_user(socket: Socket, next: any) {
+  console.log("authorize_socket_user");
+  const session = socket.request.session;
+  if (session && session.user) {
+    next();
+  } else {
+    console.log("Bad request");
+    next(new Error("Cannot authorize"));
+  }
+}
+
 app.use(helmet()); // Setup basic security headers
 app.use(cors(cors_options));
 app.use(express.json()); // Parse application/json in req.body
-app.use(
-  session({
-    name: "sid", // Session ID
-    resave: false, // True is deprecated
-    saveUninitialized: false, // True is deprecated
-    secret: `${process.env.SESSION_SECRET}`, // Sign cookie
-    store: new RedisStore({ client: redis_client }),
-    // Login `SessionData` cookie info
-    cookie: {
-      httpOnly: true, // Disallow client to see document.cookie
-      maxAge: 3600 * 1000 * 24, // 24-hour cookie lifetime
-      sameSite: process.env.PRODUCTION === "true" ? "none" : "lax",
-      secure: process.env.PRODUCTION === "true" ? true : "auto",
-    },
-  })
-);
+app.use(session_middleware);
 app.use("/auth", auth_router); // Route requests to /auth
 
-app.get("/", (request, response) => {
+io.use(socket_session_interface(session_middleware));
+io.use(authorize_socket_user);
+
+/*
+
+ Server endpoints
+
+ */
+
+app.get("/", (_, response) => {
   response.json("Hello, world");
 });
 
-io.on("connect", (socket) => {});
+io.on("connect", (socket: Socket) => {
+  console.log(socket.id);
+  console.log(socket.request.session.user.username);
+});
 
 server.listen(4242, () => {
   console.log("Listening on http://localhost:4242");
