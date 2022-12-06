@@ -10,8 +10,11 @@ function Chat() {
       <VStack>
         <TabPanels>
           {contacts.length > 0 ? (
+            // Map each contact from context to its own TabPanel
             contacts.map((contact: IContact) => (
-              <TabPanel>Chatting with {contact.username}</TabPanel>
+              <TabPanel key={contact.username}>
+                Chatting with {contact.username}
+              </TabPanel>
             ))
           ) : (
             <p>Invite someone to chat!</p>

@@ -20,7 +20,10 @@ function SideContactsBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
+      {/* Add new contact modal */}
       <AddContact isOpen={isOpen} onClose={onClose} />
+
+      {/* Contacts title and add new contact button */}
       <VStack pt="16px" borderLeft="1px solid grey" h="100%">
         <HStack justify="center" w="100%">
           <div
@@ -38,24 +41,30 @@ function SideContactsBar() {
                 lineHeight: 1,
               }}
             >
-              Contacts
+              Contacts {/* Contacts title */}
             </p>
+
+            {/* Add new contact button, (+) opens modal */}
             <Button className="add-contact" onClick={onOpen} size="xs">
               <AddIcon />
             </Button>
           </div>
         </HStack>
+
+        {/* Contact online/offline list */}
         <VStack as={TabList} border="none" borderTop="1px solid grey" w="80%">
           {contacts.length > 0 ? (
             // Map each contact from context to its own Flex container
             contacts.map((contact: IContact) => (
-              <Flex as={Tab} direction="row" w="100%">
+              <Flex key={contact.username} as={Tab} direction="row" w="100%">
                 <Circle
                   size="10px"
                   // Online (green) or offline (red)
                   bg={contact.online ? "green.500" : "red.500"}
                 />
+
                 <Spacer />
+
                 <p>{contact.username}</p>
               </Flex>
             ))
