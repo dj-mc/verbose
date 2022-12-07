@@ -42,7 +42,18 @@ declare module "http" {
       user: {
         username: string;
         id: number;
+        contact_id: string;
       };
+    };
+  }
+}
+
+declare module "socket.io" {
+  interface Socket {
+    user: {
+      username: string;
+      id: number;
+      contact_id: string;
     };
   }
 }
@@ -70,7 +81,9 @@ function socket_session_interface(middleware: any) {
 function authorize_socket_user(socket: Socket, next: any) {
   console.log("authorize_socket_user");
   const session = socket.request.session;
+
   if (session && session.user) {
+    socket.user = { ...session.user };
     next();
   } else {
     console.log("Bad request");
@@ -98,8 +111,12 @@ app.get("/", (_, response) => {
 });
 
 io.on("connect", (socket: Socket) => {
-  console.log(socket.id);
-  console.log(socket.request.session.user.username);
+  console.log("socket.id:", socket.id);
+  console.log("socket.user.contact_id:", socket.user.contact_id);
+  console.log(
+    "socket.request.session.user.username:",
+    socket.request.session.user.username
+  );
 });
 
 server.listen(4242, () => {

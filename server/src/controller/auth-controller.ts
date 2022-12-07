@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import { NextFunction, Request, Response } from "express";
+import { v4 as uuidv4 } from "uuid";
 
 import db_pool from "../../db.js";
 import { auth_validation_schema } from "verbose-common";
@@ -35,6 +36,7 @@ declare module "express-session" {
     user: {
       username: string;
       id: number;
+      contact_id: string;
     };
   }
 }
@@ -56,7 +58,7 @@ async function pending_login(request: Request, response: Response) {
 
   // Query for a potentially registered user
   const pending_login = await db_pool.query(
-    "SELECT id, username, password_hash FROM users u WHERE u.username=$1",
+    "SELECT id, username, password_hash, contact_id FROM users u WHERE u.username=$1",
     [username]
   );
 
@@ -72,8 +74,9 @@ async function pending_login(request: Request, response: Response) {
       // Found password from hash
       // Set login session cookie
       request.session.user = {
-        username,
+        username: pending_login.rows[0].username,
         id: pending_login.rows[0].id,
+        contact_id: pending_login.rows[0].contact_id,
       };
 
       response.json({ logged_in: true, username });
@@ -98,17 +101,19 @@ async function pending_register(request: Request, response: Response) {
     // No username found, proceed with registration
     // Salt password (10 times) to safeguard rainbow table attacks
     const password_hash = await bcrypt.hash(password, 10);
+    const contact_id = uuidv4();
 
     const new_registered_user = await db_pool.query(
       // Insert new registered user into database
-      "INSERT INTO users(username, password_hash) values($1, $2) RETURNING id, username",
-      [username, password_hash]
+      "INSERT INTO users(username, password_hash, contact_id) values($1, $2, $3) RETURNING id, username, contact_id",
+      [username, password_hash, contact_id]
     );
 
     // Set login session cookie
     request.session.user = {
-      username,
+      username: new_registered_user.rows[0].username,
       id: new_registered_user.rows[0].id,
+      contact_id: new_registered_user.rows[0].contact_id,
     };
 
     response.json({ logged_in: true, username });
@@ -117,9 +122,4 @@ async function pending_register(request: Request, response: Response) {
   }
 }
 
-export {
-  is_logged_in,
-  pending_login,
-  pending_register,
-  validate_form,
-};
+export { is_logged_in, pending_login, pending_register, validate_form };
