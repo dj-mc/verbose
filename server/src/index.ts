@@ -9,13 +9,13 @@ import { Server, Socket } from "socket.io";
 
 // This project is fullstack typescript outputting esnext,
 // so we must append .js to local imports to support esm in nodejs.
-import auth_router from "./router/auth-router.js";
+import auth_router from "./routers/auth-router.js";
 import {
   socket_session_interface,
   authorize_socket_user,
   init_socket_user,
   add_contact,
-} from "./controller/auth-socket-session.js";
+} from "./controllers/auth-socket-session.js";
 import redis_client from "../redis.js";
 // I could've had the verbose-common code output to cjs, but
 // the client's scaffold (vite -> esnext) was not playing along.

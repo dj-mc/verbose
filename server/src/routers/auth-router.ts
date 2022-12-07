@@ -5,8 +5,8 @@ import {
   pending_login,
   pending_register,
   validate_form,
-} from "../controller/auth-controller.js";
-import limit_requests from "../controller/limit-requests.js";
+} from "../controllers/auth-controller.js";
+import limit_requests from "../controllers/limit-requests.js";
 
 const auth_router = express.Router();
 
