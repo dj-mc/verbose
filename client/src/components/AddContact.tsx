@@ -40,7 +40,7 @@ function AddContact({
           >
             <Form>
               <ModalBody>
-                <TextInput label="Contact's username" name="username" />
+                <TextInput label="Contact's username" name="username" autoComplete="off" />
               </ModalBody>
 
               <ModalFooter>

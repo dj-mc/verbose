@@ -4,6 +4,7 @@ import { Field, useField } from "formik";
 interface ITextInput {
   name: string;
   label: string;
+  autoComplete?: string;
   type?: string;
 }
 
