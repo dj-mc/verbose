@@ -20,6 +20,19 @@ docker exec -it <CONTAINER ID> redis-cli
 
 # Get all keys
 keys *
+
+# Flush all keys
+flushall
+
+# Get all hash field values from a user's `contact_id` key
+hgetall contact_id:<username>
+
+# Get all (0: first, -1: last) elements from a list
+# stored in a user's `contacts` key
+lrange contacts:<username> 0 -1
+
+# Delete data stored in a user's `contacts` key
+del contacts:<username>
 ```
 
 ## environment
