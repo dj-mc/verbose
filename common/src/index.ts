@@ -23,4 +23,12 @@ const contact_validation_schema = Yup.object({
     .matches(/[a-z]{3}[\w]*/i, "Must start with 3 alphabet characters"),
 });
 
-export { auth_validation_schema, contact_validation_schema };
+const chat_input_validation_schema = Yup.object({
+  message: Yup.string().min(1).max(360, "Your chat message is too long"),
+});
+
+export {
+  auth_validation_schema,
+  contact_validation_schema,
+  chat_input_validation_schema,
+};
