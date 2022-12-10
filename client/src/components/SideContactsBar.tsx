@@ -18,6 +18,7 @@ import ContactsContext, { IContact } from "./ContactsContext";
 function SideContactsBar() {
   const { contacts } = useContext(ContactsContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <>
       {/* Add new contact modal */}
@@ -56,7 +57,7 @@ function SideContactsBar() {
           {contacts.length > 0 ? (
             // Map each contact from context to its own Flex container
             contacts.map((contact: IContact) => (
-              <Flex key={contact.username} as={Tab} direction="row" w="100%">
+              <Flex as={Tab} key={contact.username} direction="row" w="100%">
                 <Circle
                   size="10px"
                   // Online (green) or offline (red)

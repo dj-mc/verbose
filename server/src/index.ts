@@ -25,7 +25,7 @@ const app = express();
 const server = http.createServer(app);
 
 const cors_options = {
-  // Let the client and server share resources
+  // Let verbose-client and verbose-server share resources
   origin: "http://localhost:5173",
   // Including cookies for credentials
   credentials: true,
@@ -103,8 +103,8 @@ io.on("connect", (socket: Socket) => {
   init_socket_user(socket);
   // Listen for add_contact event trigger
   // from AddContact's onSubmit calling socket.emit("add_contact").
-  socket.on("add_contact", (contact_name, callback) => {
-    add_contact(socket, contact_name, callback);
+  socket.on("add_contact", (contact_username, callback) => {
+    add_contact(socket, contact_username, callback);
   });
 
   socket.on("disconnecting", () => disconnect_user(socket));

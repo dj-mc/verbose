@@ -77,11 +77,11 @@ async function init_socket_user(socket: Socket) {
   const rooms = parsed_contacts.map((contact) => contact.contact_id);
 
   console.log(`${socket.user.username}'s contacts:`, parsed_contacts);
-  // Send signal to <Dashboard /> to update its contacts state
+  // Send signal to Dashboard UI to update its contacts state
   socket.emit("contacts", parsed_contacts);
 
   if (rooms.length > 0) {
-    // Send signal to contacts that you're online
+    // Send signal to user's contacts they're now online
     socket.to(rooms).emit("online", true, socket.user.username);
     console.log(`Connected: contact_id:${socket.user.username}`, rooms);
   }
@@ -97,18 +97,21 @@ async function init_socket_user(socket: Socket) {
 
 async function add_contact(
   socket: Socket,
-  contact_name: string,
+  contact_username: string,
   callback: CallableFunction
 ) {
   console.log("\nadd_contact");
-  console.log("Attempting to add contact_name:", contact_name);
+  console.log("Attempting to add contact_username:", contact_username);
 
   const pending_contact = await redis_client.hgetall(
-    `contact_id:${contact_name}`
+    `contact_id:${contact_username}`
   );
 
   if (!pending_contact.contact_id) {
-    callback({ done: false, error_message: `Couldn't find ${contact_name}` });
+    callback({
+      done: false,
+      error_message: `Couldn't find ${contact_username}`,
+    });
     return;
   }
 
@@ -120,19 +123,24 @@ async function add_contact(
   const contacts_cache = await get_contacts_cache(socket);
 
   if (contacts_cache) {
-    console.log("contact_name:", contact_name);
+    console.log("contact_username:", contact_username);
     console.log("pending_contact.contact_id:", pending_contact.contact_id);
     console.log("contacts_cache:", contacts_cache);
 
     if (
-      contacts_cache.includes(`${contact_name}.${pending_contact.contact_id}`)
+      contacts_cache.includes(
+        `${contact_username}.${pending_contact.contact_id}`
+      )
     ) {
-      callback({ done: false, error_message: `${contact_name} already added` });
+      callback({
+        done: false,
+        error_message: `${contact_username} already added`,
+      });
       return;
     } else {
       // Join <username>.<contact_id>
       const joined_contact_data = [
-        contact_name,
+        contact_username,
         pending_contact.contact_id,
       ].join(".");
 
@@ -146,7 +154,7 @@ async function add_contact(
       );
 
       const new_contact = {
-        username: contact_name,
+        username: contact_username,
         contact_id: pending_contact.contact_id,
         online: pending_contact.online,
       };
@@ -166,7 +174,7 @@ async function disconnect_user(socket: Socket) {
   const parsed_contacts = await parse_contacts(contacts_cache);
   const rooms = parsed_contacts.map((contact) => contact.contact_id);
 
-  // Send signal to contacts that you're offline
+  // Send signal to user's contacts they're now offline
   socket.to(rooms).emit("online", false, socket.user.username);
   console.log(`Disconnected: contact_id:${socket.user.username}`, rooms);
 }
