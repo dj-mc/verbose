@@ -1,25 +1,20 @@
-import { TabPanel, TabPanels, VStack } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
 import { useContext } from "react";
 
-import ContactsContext, { IContact } from "./ContactsContext";
+import ChatRoom from "./ChatRoom";
+import ChatForm from "./ChatForm";
+import ContactsContext from "./ContactsContext";
+import MessagesContext from "./MessagesContext";
 
-function Chat() {
+function Chat({ contact_id }: { contact_id: string }) {
   const { contacts } = useContext(ContactsContext);
+  const { messages } = useContext(MessagesContext);
+
   return (
     <>
-      <VStack>
-        <TabPanels>
-          {contacts.length > 0 ? (
-            // Map each contact from context to its own TabPanel
-            contacts.map((contact: IContact) => (
-              <TabPanel key={contact.username}>
-                Chatting with {contact.username}
-              </TabPanel>
-            ))
-          ) : (
-            <p>Invite someone to chat!</p>
-          )}
-        </TabPanels>
+      <VStack h="100%" justify="end">
+        <ChatRoom contacts={contacts} messages={messages} />
+        <ChatForm contact_id={contact_id} />
       </VStack>
     </>
   );
