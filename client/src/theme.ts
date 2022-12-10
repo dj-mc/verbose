@@ -11,13 +11,11 @@ const theme = {
         fontWeight: 500,
         fontFamily: "Inter, Avenir, Helvetica, Arial",
         lineHeight: "24px",
-        minWidth: "320px",
       },
       "#root": {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        width: "100%",
         height: "100vh",
       },
       "h1, h2, h3, p": {
@@ -40,6 +38,17 @@ const theme = {
       },
       ".button-group button": {
         width: "100px",
+      },
+      ".truncate-text-parent": {
+        display: "grid",
+        placeItems: "center",
+        overflow: "hidden",
+      },
+      ".truncate-text": {
+        width: "50px",
+        whiteSpace: "nowrap",
+        textOverflow: "ellipsis",
+        overflow: "hidden",
       },
       ".theme-toggle": {
         width: "16px",

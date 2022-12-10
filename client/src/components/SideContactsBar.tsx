@@ -8,6 +8,7 @@ import {
   Tab,
   TabList,
   useDisclosure,
+  useMediaQuery,
   VStack,
 } from "@chakra-ui/react";
 import { useContext } from "react";
@@ -17,7 +18,9 @@ import ContactsContext, { IContact } from "./ContactsContext";
 
 function SideContactsBar() {
   const { contacts } = useContext(ContactsContext);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [smaller_than_650px] = useMediaQuery("(max-width: 650px)");
 
   return (
     <>
@@ -36,19 +39,29 @@ function SideContactsBar() {
           >
             <p
               style={{
+                fontSize: smaller_than_650px ? "smaller" : "medium",
                 display: "inline-block",
-                textDecoration: "underline",
-                marginRight: "10px",
+                textDecoration: smaller_than_650px ? "underline" : "none",
+                marginRight: smaller_than_650px ? "0px" : "10px",
                 lineHeight: 1,
               }}
             >
-              Contacts {/* Contacts title */}
+              {/* Contacts title */}
+              {smaller_than_650px ? (
+                <a style={{ cursor: "pointer" }} onClick={onOpen}>
+                  Contacts
+                </a>
+              ) : (
+                "Contacts"
+              )}
             </p>
 
             {/* Add new contact button, (+) opens modal */}
-            <Button className="add-contact" onClick={onOpen} size="xs">
-              <AddIcon />
-            </Button>
+            {smaller_than_650px ? null : (
+              <Button className="add-contact" onClick={onOpen} size="xs">
+                <AddIcon />
+              </Button>
+            )}
           </div>
         </HStack>
 
@@ -59,19 +72,33 @@ function SideContactsBar() {
             contacts.map((contact: IContact) => (
               <Flex as={Tab} key={contact.username} direction="row" w="100%">
                 <Circle
-                  size="10px"
+                  size={smaller_than_650px ? "5px" : "10px"}
                   // Online (green) or offline (red)
                   bg={contact.online ? "green.500" : "red.500"}
                 />
 
                 <Spacer />
-
-                <p>{contact.username}</p>
+                <div className="truncate-text-parent">
+                  <p
+                    className="truncate-text"
+                    style={{
+                      fontSize: smaller_than_650px ? "smaller" : "medium",
+                    }}
+                  >
+                    {contact.username}
+                  </p>
+                </div>
               </Flex>
             ))
           ) : (
             // Otherwise display "None"
-            <p style={{ marginTop: "25px" }}>None</p>
+            <p
+              style={{
+                marginTop: "25px",
+              }}
+            >
+              None
+            </p>
           )}
         </VStack>
       </VStack>
