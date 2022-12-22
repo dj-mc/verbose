@@ -1,5 +1,7 @@
 import { Socket } from "socket.io";
 
+import { IMessage } from "verbose-common";
+
 import redis_client from "../../redis.js";
 
 async function get_contacts_cache(socket: Socket) {
@@ -77,14 +79,38 @@ async function init_socket_user(socket: Socket) {
   const rooms = parsed_contacts.map((contact) => contact.contact_id);
 
   console.log(`${socket.user.username}'s contacts:`, parsed_contacts);
-  // Send signal to Dashboard UI to update its contacts state
-  socket.emit("contacts", parsed_contacts);
 
   if (rooms.length > 0) {
     // Send signal to user's contacts they're now online
     socket.to(rooms).emit("online", true, socket.user.username);
     console.log(`Connected: contact_id:${socket.user.username}`, rooms);
   }
+
+  // Send signal to Dashboard UI to update its contacts state
+  socket.emit("contacts", parsed_contacts);
+
+  const chat_query = await redis_client.lrange(
+    `chat:${socket.user.contact_id}`,
+    0,
+    -1
+  );
+
+  const messages = chat_query.map((message) => {
+    // Message data is a "to.from.content" string
+    const [to, from, content] = message.split(".");
+    console.log(to, from, content);
+
+    return {
+      to,
+      from,
+      content,
+    };
+  });
+
+  if (messages)
+    if (messages.length > 0) {
+      socket.emit("messages", messages);
+    }
 
   // console.log("\nDEBUG SOCKET\n");
   // console.log("socket.id:", socket.id);
@@ -163,6 +189,20 @@ async function add_contact(
   }
 }
 
+async function direct_message(socket: Socket, message: IMessage) {
+  message.from = socket.user.contact_id;
+  const message_data = [message.to, message.from, message.content].join(".");
+
+  // Push joined message data to the top of a stack
+  // located at key `chat:contact_id` in redis.
+  await redis_client.lpush(`chat:${message.to}`, message_data); // Push to receiver
+  await redis_client.lpush(`chat:${message.from}`, message_data); // Push to sender
+
+  // Send signal and its message payload
+  // to the receiving client.
+  socket.to(message.to).emit("direct_message", message);
+}
+
 async function disconnect_user(socket: Socket) {
   await redis_client.hset(
     `contact_id:${socket.user.username}`,
@@ -182,6 +222,7 @@ async function disconnect_user(socket: Socket) {
 export {
   add_contact,
   authorize_socket_user,
+  direct_message,
   disconnect_user,
   init_socket_user,
   socket_session_interface,

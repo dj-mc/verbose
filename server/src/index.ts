@@ -7,12 +7,15 @@ import helmet from "helmet";
 import connectRedis from "connect-redis";
 import { Server, Socket } from "socket.io";
 
+import { IMessage } from "verbose-common";
+
 // This project is fullstack typescript outputting esnext,
 // so we must append .js to local imports to support esm in nodejs.
 import auth_router from "./routers/auth-router.js";
 import {
   add_contact,
   authorize_socket_user,
+  direct_message,
   disconnect_user,
   init_socket_user,
   socket_session_interface,
@@ -105,6 +108,10 @@ io.on("connect", (socket: Socket) => {
   // from AddContact's onSubmit calling socket.emit("add_contact").
   socket.on("add_contact", (contact_username, callback) => {
     add_contact(socket, contact_username, callback);
+  });
+
+  socket.on("direct_message", (message: IMessage) => {
+    direct_message(socket, message);
   });
 
   socket.on("disconnecting", () => disconnect_user(socket));

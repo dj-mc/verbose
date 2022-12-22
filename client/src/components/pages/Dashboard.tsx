@@ -1,12 +1,14 @@
 import { Grid, GridItem, Tabs } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 
+import { IMessage } from "verbose-common";
+
 import Chat from "../Chat";
 import ContactsContext, { IContact } from "../ContactsContext";
-import MessagesContext, { IMessage } from "../MessagesContext";
+import MessagesContext from "../MessagesContext";
 import SideContactsBar from "../SideContactsBar";
 import SideNavBar from "../SideNavBar";
-import socket from "../../socket-io.js";
+import socket from "../../socket-io";
 import { AuthContext } from "../UserContext";
 
 function useSocket(
@@ -22,7 +24,6 @@ function useSocket(
     socket.on("online", (status, username) => {
       // Update SideContactsBar UI with online status of contacts list
       set_contacts((previous_contacts: IContact[]) => {
-        console.log('socket.on("online"): set_contacts:', previous_contacts);
         return [...previous_contacts].map((c) => {
           if (c.username === username) {
             c.online = status;
@@ -34,16 +35,20 @@ function useSocket(
 
     // Listen for newly added contacts
     socket.on("contacts", (contacts) => {
-      console.log('socket.on("contacts"): set_contacts:', contacts);
       // Update SideContactsBar UI with user's new contacts list
       set_contacts(contacts);
     });
 
     // Listen for newly sent messages
     socket.on("messages", (messages) => {
-      console.log('socket.on("messages"): set_messages:', messages);
       // Update Chat's UI with new messages
       set_messages(messages);
+    });
+
+    // Listen for direct messages
+    socket.on("direct_message", (message) => {
+      // Update Chat's UI with new messages
+      set_messages((previous_messages) => [message, ...previous_messages]);
     });
 
     // Listen for connection errors
@@ -56,9 +61,10 @@ function useSocket(
       socket.off("online");
       socket.off("contacts");
       socket.off("messages");
+      socket.off("direct_message");
       socket.off("connect_error");
     };
-  }, [set_user, set_contacts, set_messages]);
+  }, [set_user, set_contacts, set_messages, socket]);
 }
 
 function Dashboard() {
@@ -74,6 +80,7 @@ function Dashboard() {
       online: false,
     },
   ]);
+
   const [contact_index, set_contact_index] = useState(0);
   const [messages, set_messages] = useState([]);
 
@@ -85,9 +92,7 @@ function Dashboard() {
         <Grid
           as={Tabs}
           onChange={(_) => (index: number) => {
-            console.log(_);
             set_contact_index(index);
-            console.log(index);
           }}
           templateColumns="repeat(10, 1fr)"
           w="100vw"

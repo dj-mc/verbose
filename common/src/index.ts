@@ -1,5 +1,11 @@
 import * as Yup from "yup";
 
+export interface IMessage {
+  to: string;
+  from: string;
+  content: string;
+}
+
 const auth_validation_schema = Yup.object({
   // Validate username input
   username: Yup.string()

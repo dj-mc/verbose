@@ -1,8 +1,9 @@
 import { TabPanel, TabPanels, VStack } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
 
-import { IContact } from "./ContactsContext.js";
-import { IMessage } from "./MessagesContext.js";
+import { IMessage } from "verbose-common";
+
+import { IContact } from "./ContactsContext";
 
 function ChatRoom({
   contacts,
