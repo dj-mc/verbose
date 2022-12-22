@@ -5,11 +5,20 @@
     "Avenir",
     "chakra",
     "Chakra",
+    "flushall",
     "formik",
     "Formik",
+    "hget",
+    "hgetall",
+    "hset",
+    "loglevel",
+    "lpush",
+    "lrange",
     "pgdata",
+    "psql",
     "resave",
-    "UI's"
+    "UI's",
+    "uuidv"
   ],
   "flagWords": [],
   "ignorePaths": ["node_modules/**"]

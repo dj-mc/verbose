@@ -10,7 +10,8 @@
     "build": "tsc",
     "build:watch": "tsc -w",
     "start": "node ./dist/src/index.js",
-    "dev": "env $(cat .env | grep -v \"#\" | xargs) npx nodemon --trace-warnings ./dist/src/index.js"
+    "dev:": "npx nodemon --trace-warnings ./dist/src/index.js",
+    "dev:env": "env $(cat .env | xargs) npx nodemon --trace-warnings ./dist/src/index.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
