@@ -8,7 +8,7 @@ function submit_auth_handler(
   }>,
   endpoint: string
 ) {
-  actions.resetForm(); // Clear submitted form
+  actions.resetForm(); // Clear input
 
   return fetch(`http://localhost:4242/auth/${endpoint}`, {
     // POST request to specified auth route endpoint (login/register)

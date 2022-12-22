@@ -37,7 +37,7 @@ function UserContext({ children }: props) {
         } else {
           set_user({ ...data });
           // Logged in user found, so
-          // navigate to their dashboard
+          // navigate to their dashboard page
           // instead of the login page
           navigate("/dashboard");
         }

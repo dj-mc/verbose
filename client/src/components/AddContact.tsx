@@ -13,8 +13,8 @@ import { useContext, useState } from "react";
 
 import { contact_validation_schema } from "verbose-common";
 
-import socket from "../socket-io.js";
-import ContactsContext, { IContact } from "./ContactsContext.js";
+import socket from "../socket-io";
+import ContactsContext, { IContact } from "./ContactsContext";
 import TextInput from "./TextInput";
 
 function AddContact({
@@ -53,7 +53,6 @@ function AddContact({
                   if (done) {
                     // Update UI with user's new contacts list
                     set_contacts((contacts: IContact[]) => {
-                      console.log("set_contacts:", [new_contact, ...contacts]);
                       return [new_contact, ...contacts];
                     });
                     onClose();
@@ -67,7 +66,7 @@ function AddContact({
                   }
                 }
               );
-              actions.resetForm();
+              actions.resetForm(); // Clear input
             }}
           >
             <Form>

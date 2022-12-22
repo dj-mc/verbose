@@ -1,7 +1,7 @@
 import UserContext from "./components/UserContext";
 
 import Views from "./components/Views";
-import socket from "./socket-io.js";
+import socket from "./socket-io";
 
 function App() {
   socket.connect();

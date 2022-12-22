@@ -18,7 +18,7 @@ function validate_form(
       // e.g. http POST localhost:4242/auth/login username="" password=""
       response.sendStatus(422);
       // Should log "Unprocessable Entity"
-      console.log(error.errors);
+      console.error(error.errors);
     })
     .then((valid) => {
       if (valid) {
