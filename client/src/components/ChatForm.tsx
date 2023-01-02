@@ -19,7 +19,7 @@ function ChatForm({ contact_id }: { contact_id: string }) {
           if (values.message.trim() !== "") {
             const message = {
               to: contact_id,
-              from: null,
+              from: "",
               // Replace extraneous whitespace between words
               // with a single space.
               content: values.message.trim().replace(/\s+/g, " "),

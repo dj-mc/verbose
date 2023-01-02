@@ -25,7 +25,7 @@ function submit_auth_handler(
     })
     .then((response) => {
       if (!response || !response.ok || response.status >= 400) {
-        return; // Bad server response
+        return false; // Bad server response
       } else {
         return response.json(); // Return then-able promise
       }

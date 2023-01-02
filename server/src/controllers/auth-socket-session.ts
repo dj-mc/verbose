@@ -207,7 +207,7 @@ async function disconnect_user(socket: Socket) {
   await redis_client.hset(
     `contact_id:${socket.user.username}`,
     "online", // Set online field
-    false // to value false
+    "false" // to value false
   );
 
   const contacts_cache = await get_contacts_cache(socket);

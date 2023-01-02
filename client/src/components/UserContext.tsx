@@ -25,7 +25,7 @@ function UserContext({ children }: props) {
       .then((response) => {
         if (!response || !response.ok || response.status >= 400) {
           set_user({ logged_in: false });
-          return; // Bad server response
+          return false; // Bad server response
         } else {
           return response.json(); // Return then-able promise
         }
