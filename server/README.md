@@ -2,6 +2,9 @@
 
 ## docker images
 
+`docker-compose.yml` spins up two images:  
+`postgres:14.6-alpine` for the database and `redis:6.2.7-alpine` for the cache.
+
 ```bash
 docker compose up -d
 
